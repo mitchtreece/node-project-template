@@ -12,7 +12,7 @@ module.exports = function(app) {
     */
 
     app.get({ path: '/ping', version: '1.0.0' }, function(req, res, next) {
-        responder.success(res, { 'pong' })
-    }
+        responder.success(res, 'pong')
+    })
 
 }

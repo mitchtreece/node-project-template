@@ -1,5 +1,3 @@
-var middleware = require('./middleware.js')
-
 module.exports = function(app) {
 
     // v1

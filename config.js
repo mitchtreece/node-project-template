@@ -8,7 +8,7 @@ module.exports = {
     'database': {
         'dev': '',
         'prod': ''
-    }
+    },
 
     'shipit': {
         'remote': {
