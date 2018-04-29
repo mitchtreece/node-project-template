@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var colors = require('colors/safe')
 
 var config = require('./config.js')
-var versioner = require('./versioning.js')
+var versioner = require('./versioner.js')
 
 var env = process.env
 var isProduction = (env.NODE_ENV == 'production')
@@ -18,9 +18,9 @@ var port = isProduction ? config.port.prod : config.port.dev
 // })
 
 var app = restify.createServer({ name: 'Node Project Template' })
-app.pre(versioner.handleVersioning())
 app.pre(restify.pre.sanitizePath())
-app.use(restify.queryParser())
+app.pre(versioner.versionizeRoutes())
+app.use(restify.plugins.queryParser())
 app.use(parser.urlencoded({ extended: false }))
 app.use(parser.json())
 
@@ -28,7 +28,7 @@ app.listen(port, () => {
     console.log(colors.green('** Node Project Template - running on port ' + port + " (" + envString + ") **"))
 })
 
-app.get('/', restify.serveStatic({
+app.get('/', restify.plugins.serveStatic({
 	'directory': './public',
 	'default': 'index.html'
 }))

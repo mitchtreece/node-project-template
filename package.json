@@ -23,7 +23,7 @@
     "jsonwebtoken": "^7.4.3",
     "moment": "^2.22.1",
     "mongoose": "^4.13.12",
-    "restify": "^4.3.3",
+    "restify": "^7.1.1",
     "restify-jwt": "^0.4.0",
     "semver": "^5.5.0",
     "shortid": "^2.2.8",
