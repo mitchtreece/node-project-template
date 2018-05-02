@@ -1,4 +1,4 @@
-var errors = require('restify-errors')
+var errors = require('./errors.js')
 var colors = require('colors/safe')
 
 module.exports.send = function(res, code, object) {
@@ -34,78 +34,29 @@ module.exports.created = function(res, object) {
 }
 
 module.exports.error = function(res, message) {
-
-    this.send(res, 400, {
-        error: {
-            code: 'GenericError',
-            message: message
-        }
-    })
-
+    this.send(res, 400, { error: errors.generic(message) })
 }
 
 module.exports.badRequest = function(res, message) {
-
-    this.send(res, 400, {
-        error: {
-            code: new errors.BadRequestError().name,
-            message: message
-        }
-    })
-
+    this.send(res, 400, { error: errors.badRequest(message) })
 }
 
 module.exports.invalidVersion = function(res, message) {
-
-    this.send(res, 400, {
-        error: {
-            code: new errors.InvalidVersionError().name,
-            message: message
-        }
-    })
-
+    this.send(res, 400, { error: errors.invalidVersion(message) })
 }
 
 module.exports.unauthorized = function(res, message) {
-
-    this.send(res, 401, {
-        error: {
-            code: new errors.UnauthorizedError().name,
-            message: message
-        }
-    })
-
+    this.send(res, 401, { error: errors.unauthorized(message) })
 }
 
 module.exports.forbidden = function(res, message) {
-
-    this.send(res, 403, {
-        error: {
-            code: new errors.ForbiddenError().name,
-            message: message
-        }
-    })
-
+    this.send(res, 403, { error: errors.forbidden(message) })
 }
 
 module.exports.notFound = function(res, message) {
-
-    this.send(res, 404, {
-        error: {
-            code: new errors.NotFoundError().name,
-            message: message
-        }
-    })
-
+    this.send(res, 404, { error: errors.notFound(message) })
 }
 
 module.exports.resourceNotFound = function(res, message) {
-
-    this.send(res, 404, {
-        error: {
-            code: new errors.ResourceNotFoundError().name,
-            message: message
-        }
-    })
-
+    this.send(res, 404, { error: errors.resourceNotFound(message) })
 }

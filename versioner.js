@@ -1,5 +1,6 @@
 var semver = require('semver')
 var error = require('restify-errors')
+var errors = require('./errors.js')
 
 module.exports.versionizeRoutes = function(options) {
 
@@ -41,7 +42,8 @@ module.exports.versionizeRoutes = function(options) {
                 // A valid version was requested, but without an endpoint.
                 // i.e. http://host.com/v1/
 
-                return next(new error.ResourceNotFoundError('resource not found'))
+                // return next(new error.ResourceNotFoundError('resource not found'))
+                return next(errors.resourceNotFound('resource not found'))
 
             }
 
@@ -53,7 +55,7 @@ module.exports.versionizeRoutes = function(options) {
 
         }
 
-        next(new error.InvalidVersionError('invalid api version'))
+        next(errors.invalidVersion('invalid api version'))
 
     }
 
