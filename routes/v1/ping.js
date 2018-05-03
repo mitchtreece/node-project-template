@@ -6,7 +6,7 @@ var responder = require.main.require('./responder.js')
 * GET /ping
 */
 
-module.exports = function(app) {
+module.exports = (app) => {
 
     /**
     * Ping! Pong?
@@ -23,6 +23,14 @@ module.exports = function(app) {
 
     function pingV2(req, res) {
         responder.success(res, { message: 'pong' })
+    }
+
+    app.get('/bad', restify.plugins.conditionalHandler([
+        { version: '1.0.0', handler: badV1 }
+    ]))
+
+    function badV1(req, res, next) {
+        responder.badRequest(res, next, 'A wild error appeared!')
     }
 
 }

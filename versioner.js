@@ -2,7 +2,7 @@ var semver = require('semver')
 var error = require('restify-errors')
 var errors = require('./errors.js')
 
-module.exports.versionizeRoutes = function(options) {
+module.exports.versionizeRoutes = (options) => {
 
     options = options || {}
 
@@ -11,7 +11,7 @@ module.exports.versionizeRoutes = function(options) {
         prefix = '/'.concat(prefix)
     }
 
-    return function(req, res, next) {
+    return (req, res, next) => {
 
         req.originalUrl = req.url
         req.url = req.url.replace(prefix, '')
@@ -42,8 +42,7 @@ module.exports.versionizeRoutes = function(options) {
                 // A valid version was requested, but without an endpoint.
                 // i.e. http://host.com/v1/
 
-                // return next(new error.ResourceNotFoundError('resource not found'))
-                return next(errors.resourceNotFound('resource not found'))
+                return next(errors.resourceNotFound(`\/ is not a valid endpoint`))
 
             }
 

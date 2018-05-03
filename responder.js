@@ -1,21 +1,15 @@
 var errors = require('./errors.js')
 var colors = require('colors/safe')
 
-module.exports.send = function(res, code, object) {
+function sendObject(res, code, object) {
 
     var path = res.req.originalUrl
-    var success = (code >= 200 && code < 300)
     var isObject = (typeof object == 'object')
 
-    if (success) {
-        console.log(colors.green("<= (" + code + ") " + path))
-    }
-    else {
-        console.log(colors.red("<= (" + code + ") " + path))
-    }
+    log(res, code)
 
     if (isObject) {
-        object["success"] = success
+        object["success"] = true
         res.send(code, object)
     }
     else {
@@ -25,38 +19,59 @@ module.exports.send = function(res, code, object) {
 
 }
 
-module.exports.success = function(res, object) {
-    this.send(res, 200, object)
+function sendError(res, next, err) {
+
+    log(res, err.statusCode)
+    next(err)
+
 }
 
-module.exports.created = function(res, object) {
-    this.send(res, 201, object)
+function log(res, code) {
+
+    var path = res.req.originalUrl
+    var success = (code >= 200 && code < 300)
+
+    if (success) {
+        console.log(colors.green("<= (" + code + ") " + path))
+    }
+    else {
+        console.log(colors.red("<= (" + code + ") " + path))
+    }
+
 }
 
-module.exports.error = function(res, message) {
-    this.send(res, 400, { error: errors.generic(message) })
+// Success
+
+module.exports.success = (res, object) => {
+    sendObject(res, 200, object)
 }
 
-module.exports.badRequest = function(res, message) {
-    this.send(res, 400, { error: errors.badRequest(message) })
+module.exports.created = (res, object) => {
+    sendObject(res, 201, object)
 }
 
-module.exports.invalidVersion = function(res, message) {
-    this.send(res, 400, { error: errors.invalidVersion(message) })
+// Error
+
+module.exports.badRequest = (res, next, message) => {
+    sendError(res, next, errors.badRequest(message))
 }
 
-module.exports.unauthorized = function(res, message) {
-    this.send(res, 401, { error: errors.unauthorized(message) })
+module.exports.invalidVersion = (res, next, message) => {
+    sendError(res, next, errors.invalidVersion(message))
 }
 
-module.exports.forbidden = function(res, message) {
-    this.send(res, 403, { error: errors.forbidden(message) })
+module.exports.unauthorized = (res, next, message) => {
+    sendError(res, next, errors.unauthorized(message))
 }
 
-module.exports.notFound = function(res, message) {
-    this.send(res, 404, { error: errors.notFound(message) })
+module.exports.forbidden = (res, next, message) => {
+    sendError(res, next, errors.forbidden(message))
 }
 
-module.exports.resourceNotFound = function(res, message) {
-    this.send(res, 404, { error: errors.resourceNotFound(message) })
+module.exports.notFound = (res, next, message) => {
+    sendError(res, next, errors.notFound(message))
+}
+
+module.exports.resourceNotFound = (res, next, message) => {
+    sendError(res, next, errors.resourceNotFound(message))
 }
